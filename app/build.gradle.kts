@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.frontendapk"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.frontendapk"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -51,8 +51,27 @@ android {
 
 dependencies {
 
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.1") // Para manejar las solicitudes HTTP
 
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
+    // Logging interceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+
+    // Dependencias de Jetpack Compose
+    implementation("androidx.compose.ui:ui:1.3.0")
+    implementation("androidx.compose.material3:material3:1.0.0")
+
+    // Dependencia para la navegación en Compose
+    implementation("androidx.navigation:navigation-compose:2.5.1")
+
+    // Otras dependencias de Compose (si las tienes)
+    implementation("androidx.compose.ui:ui-tooling-preview:1.3.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.3.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -16,6 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun RegisterScreen(modifier: Modifier = Modifier) {
@@ -39,38 +40,38 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        TextField(
+        CustomTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Nombre de usuario") },
+            label = "Nombre de usuario",
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(
+        CustomTextField(
             value = nombre,
             onValueChange = { nombre = it },
-            label = { Text("Nombre completo") },
-            modifier = Modifier.fillMaxWidth()
+            label = "Nombre completo",
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(
+        CustomTextField(
             value = correo,
             onValueChange = { correo = it },
-            label = { Text("Correo electrónico") },
+            label = "Correo electrónico",
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(
+        CustomTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Contraseña") },
-            visualTransformation = PasswordVisualTransformation(),
+            label = "Contraseña",
+            isPassword = true,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -81,6 +82,8 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
 
                 if (username.isBlank() || password.isBlank() || nombre.isBlank() || correo.isBlank()) {
                     Toast.makeText(context, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
+
+
                     Log.d("BOTON_REGISTRO", "Se presionó el botón de registrar pero esta vacio")
                 } else {
                     val user = User(username, password, nombre, correo)
@@ -107,6 +110,46 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
         }
     }
 }
+
+
+
+@Composable
+fun CustomTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier,
+    isPassword: Boolean = false
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        modifier = modifier,
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurface
+        )
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 @Preview(showBackground = true)
 @Composable

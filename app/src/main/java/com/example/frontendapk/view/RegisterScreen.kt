@@ -1,7 +1,6 @@
 package com.example.frontendapk.view
 
 import android.util.Log
-
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -17,9 +16,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.navigation.NavController  // Importar NavController
 
 @Composable
-fun RegisterScreen(modifier: Modifier = Modifier) {
+fun RegisterScreen(navController: NavController, modifier: Modifier = Modifier) {
     // Estados para los campos de entrada
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -83,7 +83,6 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
                 if (username.isBlank() || password.isBlank() || nombre.isBlank() || correo.isBlank()) {
                     Toast.makeText(context, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
 
-
                     Log.d("BOTON_REGISTRO", "Se presionó el botón de registrar pero esta vacio")
                 } else {
                     val user = User(username, password, nombre, correo)
@@ -108,10 +107,20 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
         ) {
             Text("Registrar")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Botón para regresar a LoginScreen
+        Button(
+            onClick = {
+                navController.popBackStack()  // Regresar a la pantalla anterior (LoginScreen)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Volver al Login")
+        }
     }
 }
-
-
 
 @Composable
 fun CustomTextField(
@@ -139,20 +148,8 @@ fun CustomTextField(
     )
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewRegisterScreen() {
-    RegisterScreen()
+    RegisterScreen(navController = NavController(LocalContext.current)) // Reemplazar con un NavController válido
 }

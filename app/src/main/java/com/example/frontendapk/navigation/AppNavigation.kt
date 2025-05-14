@@ -7,10 +7,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.frontendapk.view.RegisterScreen
 import com.example.frontendapk.view.SplashScreen
+import com.example.frontendapk.view.LoginScreen
 import com.example.frontendapk.navigation.AppScreens
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
+import com.example.frontendapk.view.HomeScreen
 @Composable
 fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues) {
     NavHost(
@@ -23,7 +25,16 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
             SplashScreen(navController = navController)  // Splash Screen
         }
         composable(AppScreens.RegisterScreen.route) {
-            RegisterScreen()  // Register Screen
+            RegisterScreen(navController = navController)  // Register Screen
+        }
+
+        composable(AppScreens.LoginScreen.route) {
+            LoginScreen(navController = navController)  // Login Screen
+        }
+
+        composable("home_screen/{nombre}") { backStackEntry ->
+            val nombre = backStackEntry.arguments?.getString("nombre") ?: "Usuario"
+            HomeScreen(navController = navController, nombre = nombre)
         }
     }
 }

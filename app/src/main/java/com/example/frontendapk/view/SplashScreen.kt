@@ -35,7 +35,7 @@ fun SplashScreen(navController: NavController) {
     // Navegar automáticamente después de 2 segundos
     LaunchedEffect(Unit) {
         Handler(Looper.getMainLooper()).postDelayed({
-            navController.navigate("register_screen") {
+            navController.navigate("login_screen") {
                 popUpTo("splash_screen") { inclusive = true }
             }
         }, 5000)

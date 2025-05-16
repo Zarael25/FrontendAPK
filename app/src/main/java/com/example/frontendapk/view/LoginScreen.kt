@@ -73,9 +73,17 @@ fun LoginScreen(navController: NavController) {
                         override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                             if (response.isSuccessful) {
                                 // Obtener el token y almacenarlo
+                                Log.d("LOGIN", "Response token: ${response.body()?.accessToken}")
                                 val accessToken = response.body()?.accessToken ?: ""
                                 val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                                sharedPreferences.edit().putString("ACCESS_TOKEN", accessToken).apply()
+                                sharedPreferences.edit()
+                                    .putString("ACCESS_TOKEN", accessToken)
+                                    .putString("USERNAME", username)
+                                    .apply()
+                                Log.d("LOGIN", "Token guardado: $accessToken")
+                                Log.d("LOGIN", "Username guardado: $username")
+
+
 
                                 // Mostrar mensaje de éxito
                                 Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()

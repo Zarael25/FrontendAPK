@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
 import com.example.frontendapk.view.HomeScreen
+import com.example.frontendapk.view.PerfilScreen
+
 @Composable
 fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues) {
     NavHost(
@@ -36,5 +38,10 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
             val nombre = backStackEntry.arguments?.getString("nombre") ?: "Usuario"
             HomeScreen(navController = navController, nombre = nombre)
         }
+
+        composable(AppScreens.PerfilScreen.route) {
+            PerfilScreen(navController = navController)
+        }
+
     }
 }

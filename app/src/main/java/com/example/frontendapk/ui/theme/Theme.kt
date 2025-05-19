@@ -20,10 +20,12 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = Color.White,
     secondary = GreenGray,
     onSecondary = Color.White,
+    tertiary = ButtonYellow,
     background = GrayDarker,
     onBackground = Color.White,
     surface = GrayDark,
-    onSurface = Color.White
+    onSurface = Color.White,
+    error = ButtonRed
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -31,11 +33,12 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = Color.White,
     secondary = TealLight,
     onSecondary = Color.White,
+    tertiary = ButtonYellow,
     background = Color.White,
     onBackground = GrayDark,
     surface = Color.White,
-    onSurface = GrayDark
-
+    onSurface = GrayDark,
+    error = ButtonRed
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),

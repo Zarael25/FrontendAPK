@@ -14,7 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
 import com.example.frontendapk.view.HomeScreen
 import com.example.frontendapk.view.PerfilScreen
-
+import com.example.frontendapk.view.TusNegociosScreen
+import com.example.frontendapk.view.DetalleNegocioScreen
 @Composable
 fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues) {
     NavHost(
@@ -41,6 +42,16 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
 
         composable(AppScreens.PerfilScreen.route) {
             PerfilScreen(navController = navController)
+        }
+        composable(AppScreens.TusNegociosScreen.route) {
+            TusNegociosScreen(navController = navController)
+        }
+
+        composable("detalle_negocio/{negocioId}") { backStackEntry ->
+            val negocioId = backStackEntry.arguments?.getString("negocioId")?.toIntOrNull()
+            if (negocioId != null) {
+                DetalleNegocioScreen(navController, negocioId)
+            }
         }
 
     }

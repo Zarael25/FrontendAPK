@@ -16,5 +16,13 @@ interface ApiService {
     @GET("api/usuarios/perfil/")
     fun getUserProfile(@Header("Authorization") token: String): Call<UserProfileResponse>
 
+    @GET("api/negocios/negocios/mis_negocios/")
+    fun getMisNegocios(@Header("Authorization") token: String): Call<List<Negocio>>
+
+    @GET("api/negocios/negocios/{id}/")
+    fun getNegocioPorId(
+        @Header("Authorization") token: String,
+        @retrofit2.http.Path("id") id: Int
+    ): Call<Negocio>
 
 }

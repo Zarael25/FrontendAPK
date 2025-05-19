@@ -17,3 +17,6 @@ val TealLight = Color(0xFF2EE6D0)
 val GreenGray = Color(0xFF476662)
 val GrayDark = Color(0xFF333B3A)
 val GrayDarker = Color(0xFF273332)
+
+val ButtonRed = Color(0xFFFC0000)
+val ButtonYellow = Color(0xFFFCA300)

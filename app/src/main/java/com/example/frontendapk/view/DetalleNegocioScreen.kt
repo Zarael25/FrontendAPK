@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.frontendapk.data.Negocio
 import com.example.frontendapk.data.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
+import com.example.frontendapk.navigation.AppScreens
+import com.example.frontendapk.data.Negocio
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetalleNegocioScreen(navController: NavController, negocioId: Int) {
@@ -64,6 +64,19 @@ fun DetalleNegocioScreen(navController: NavController, negocioId: Int) {
                 Text("Categoría: ${it.categoria}")
                 Text("Número de referencia: ${it.num_referencia}")
                 Text("Documento respaldo: ${it.doc_respaldo ?: "No disponible"}")
+
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(
+                    onClick = {
+                        navController.navigate(AppScreens.EditarNegocioScreen.createRoute(it.negocio_id))
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Editar datos")
+                }
+
+
+
             } ?: Text("Cargando datos del negocio...")
         }
     }

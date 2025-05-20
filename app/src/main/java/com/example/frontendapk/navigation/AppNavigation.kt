@@ -16,6 +16,13 @@ import com.example.frontendapk.view.HomeScreen
 import com.example.frontendapk.view.PerfilScreen
 import com.example.frontendapk.view.TusNegociosScreen
 import com.example.frontendapk.view.DetalleNegocioScreen
+import com.example.frontendapk.view.RegistroNegocioScreen
+import com.example.frontendapk.view.EditarNegocioScreen
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+
+
+
 @Composable
 fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues) {
     NavHost(
@@ -52,6 +59,18 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
             if (negocioId != null) {
                 DetalleNegocioScreen(navController, negocioId)
             }
+        }
+
+        composable(AppScreens.RegistroNegocioScreen.route) {
+            RegistroNegocioScreen(navController)
+        }
+
+        composable(
+            route = AppScreens.EditarNegocioScreen.route, // ya incluye {negocioId}
+            arguments = listOf(navArgument("negocioId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val negocioId = backStackEntry.arguments?.getInt("negocioId") ?: 0
+            EditarNegocioScreen(navController, negocioId)
         }
 
     }

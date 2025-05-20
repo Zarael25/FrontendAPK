@@ -6,6 +6,10 @@ import retrofit2.http.POST
 import retrofit2.http.GET
 import retrofit2.http.Header
 
+import retrofit2.http.PATCH
+import retrofit2.http.Path
+
+
 interface ApiService {
     @POST("api/usuarios/registro/")
     fun registerUser(@Body user: User): Call<User>
@@ -23,6 +27,20 @@ interface ApiService {
     fun getNegocioPorId(
         @Header("Authorization") token: String,
         @retrofit2.http.Path("id") id: Int
+    ): Call<Negocio>
+
+    @POST("api/negocios/negocios/")
+    fun crearNegocio(
+        @Header("Authorization") token: String,
+        @Body negocio: NegocioRequest
+    ): Call<Negocio>
+
+
+    @PATCH("api/negocios/negocios/{id}/editar-parcial/")
+    fun editarNegocioParcial(
+        @Header("Authorization") token: String,
+        @Path("id") negocioId: Int,
+        @Body negocio: NegocioRequest
     ): Call<Negocio>
 
 }

@@ -13,12 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.frontendapk.data.Negocio
 import com.example.frontendapk.data.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.example.frontendapk.navigation.AppScreens
+import androidx.compose.foundation.shape.CircleShape
+import com.example.frontendapk.data.Negocio
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,7 +60,26 @@ fun TusNegociosScreen(navController: NavController) {
                     }
                 }
             )
-        }
+        },
+        floatingActionButton = {
+            // Botón flotante redondo en la esquina inferior izquierda
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+            ) {
+                FloatingActionButton(
+                    onClick = { navController.navigate(AppScreens.RegistroNegocioScreen.route) },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .align(androidx.compose.ui.Alignment.BottomEnd), // esquina inferior izquierda
+                    shape = CircleShape
+                ) {
+                    Text("+", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onPrimary)
+                }
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End
     ) { padding ->
         Column(modifier = Modifier.padding(padding).padding(16.dp)) {
             if (negocios.isEmpty()) {

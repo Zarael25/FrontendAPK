@@ -9,4 +9,10 @@ sealed class AppScreens(val route: String) {
     object DetalleNegocioScreen : AppScreens("detalle_negocio/{negocioId}") {
         fun createRoute(negocioId: Int) = "detalle_negocio/$negocioId"
     }
+    object RegistroNegocioScreen : AppScreens("registro_negocio")
+
+    object EditarNegocioScreen : AppScreens("editar_negocio/{negocioId}") {
+        fun createRoute(negocioId: Int) = "editar_negocio/$negocioId"
+    }
+
 }

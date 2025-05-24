@@ -29,7 +29,6 @@ fun LoginScreen(navController: NavController) {
     // Estados para los campos de entrada
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
     // Obtener el contexto
     val context = LocalContext.current
 

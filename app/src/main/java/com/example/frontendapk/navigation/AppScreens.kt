@@ -22,4 +22,11 @@ sealed class AppScreens(val route: String) {
         fun createRoute(negocioId: Int) = "tus_filas_screen/$negocioId"
     }
 
+    object DetalleFilaScreen : AppScreens("detalle_fila/{filaId}") {
+        fun createRoute(filaId: Int) = "detalle_fila/$filaId"
+    }
+
+    object EditarFilaScreen : AppScreens("editar_fila/{filaId}") {
+        fun createRoute(filaId: Int) = "editar_fila/$filaId"
+    }
 }

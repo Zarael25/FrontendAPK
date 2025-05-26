@@ -55,4 +55,24 @@ interface ApiService {
         @Body fila: FilaRequest
     ): Call<Unit>
 
+    @GET("api/negocios/{id_negocio}/mis_filas/")
+    fun getFilasPorNegocio(
+        @Header("Authorization") token: String,
+        @Path("id_negocio") idNegocio: Int
+    ): Call<List<Atencion>>
+
+    @GET("api/atenciones/{id}/")
+    fun getFilaPorId(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Call<Atencion>
+
+    @PATCH("api/atenciones/{id_fila}/editar-parcial/")
+    fun editarFilaParcial(
+        @Header("Authorization") token: String,
+        @Path("id_fila") filaId: Int,
+        @Body datos: Map<String, @JvmSuppressWildcards Any>
+    ): Call<Void>
+
+
 }

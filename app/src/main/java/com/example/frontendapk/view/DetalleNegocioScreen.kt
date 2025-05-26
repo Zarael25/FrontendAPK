@@ -57,29 +57,6 @@ fun DetalleNegocioScreen(navController: NavController, negocioId: Int) {
                 }
             )
         },
-        floatingActionButton = {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                FloatingActionButton(
-                    onClick = {
-                        navController.navigate(AppScreens.RegistroFilaScreen.createRoute(negocioId))
-                    },
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.align(androidx.compose.ui.Alignment.BottomEnd),
-                    shape = CircleShape
-                ) {
-                    Text(
-                        "+",
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-            }
-        },
-        floatingActionButtonPosition = FabPosition.End
     ) { padding ->
         Column(modifier = Modifier.padding(padding).padding(16.dp)) {
             negocio?.let {
@@ -124,7 +101,8 @@ fun DetalleNegocioScreen(navController: NavController, negocioId: Int) {
                 ) {
                     Text(
                         "Eliminar",
-                        color = MaterialTheme.colorScheme.onErrorContainer
+
+
                     )
                 }
 

@@ -12,10 +12,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun HomeScreen(navController: NavController, nombre: String) {
     val context = LocalContext.current
+
+    // Verificar si hay token al iniciar la pantalla
+    LaunchedEffect(Unit) {
+        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val token = sharedPreferences.getString("ACCESS_TOKEN", null)
+
+        if (token.isNullOrEmpty()) {
+            // Si no hay token, redirigir a LoginScreen
+            navController.navigate("login_screen") {
+                // Limpia el stack para que no pueda volver a Home sin loguearse
+                popUpTo(0)
+            }
+        }
+    }
 
     Scaffold { paddingValues ->
         Column(
@@ -26,7 +41,7 @@ fun HomeScreen(navController: NavController, nombre: String) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Banner superior
+            // Tu UI aquí, igual que antes
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -69,14 +84,12 @@ fun HomeScreen(navController: NavController, nombre: String) {
                 }
             }
 
-            // Descripción de la app
             Text(
                 text = "Bienvenid@ $nombre. Esta aplicación te permite gestionar y participar en filas virtuales para diferentes negocios de forma eficiente.",
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
 
-            // Botones de navegación
             Button(
                 onClick = { navController.navigate("filas_screen") },
                 modifier = Modifier

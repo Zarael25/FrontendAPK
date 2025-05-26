@@ -29,10 +29,21 @@ fun TusNegociosScreen(navController: NavController) {
 
     var negocios by remember { mutableStateOf<List<Negocio>>(emptyList()) }
 
-    LaunchedEffect(Unit) {
-        val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val token = prefs.getString("ACCESS_TOKEN", null)
+    // Obtén el token al inicio
+    val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+    val token = prefs.getString("ACCESS_TOKEN", null)
 
+    // Si no hay token, redirige a login inmediatamente
+    LaunchedEffect(token) {
+        if (token.isNullOrEmpty()) {
+            navController.navigate("login_screen") {
+                popUpTo("tus_negocios_screen") { inclusive = true }
+            }
+        }
+    }
+
+    // Si hay token, carga los datos normalmente
+    LaunchedEffect(token) {
         if (!token.isNullOrEmpty()) {
             apiService.getMisNegocios("Bearer $token").enqueue(object : Callback<List<Negocio>> {
                 override fun onResponse(call: Call<List<Negocio>>, response: Response<List<Negocio>>) {
@@ -50,58 +61,60 @@ fun TusNegociosScreen(navController: NavController) {
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Tus Negocios") },
-                actions = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Volver atrás")
+    // UI solo se muestra si token no es nulo (por seguridad)
+    if (!token.isNullOrEmpty()) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Tus Negocios") },
+                    actions = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Volver atrás")
+                        }
+                    }
+                )
+            },
+            floatingActionButton = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                ) {
+                    FloatingActionButton(
+                        onClick = { navController.navigate(AppScreens.RegistroNegocioScreen.route) },
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .align(androidx.compose.ui.Alignment.BottomEnd),
+                        shape = CircleShape
+                    ) {
+                        Text("+", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onPrimary)
                     }
                 }
-            )
-        },
-        floatingActionButton = {
-            // Botón flotante redondo en la esquina inferior izquierda
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-            ) {
-                FloatingActionButton(
-                    onClick = { navController.navigate(AppScreens.RegistroNegocioScreen.route) },
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .align(androidx.compose.ui.Alignment.BottomEnd), // esquina inferior izquierda
-                    shape = CircleShape
-                ) {
-                    Text("+", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onPrimary)
-                }
-            }
-        },
-        floatingActionButtonPosition = FabPosition.End
-    ) { padding ->
-        Column(modifier = Modifier.padding(padding).padding(16.dp)) {
-            if (negocios.isEmpty()) {
-                Text("No tienes negocios registrados.")
-            } else {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    items(negocios) { negocio ->
-                        val color = when (negocio.estado) {
-                            "verificado" -> MaterialTheme.colorScheme.primary
-                            "en_revision" -> MaterialTheme.colorScheme.tertiary
-                            "rechazado" -> MaterialTheme.colorScheme.error
-                            else -> MaterialTheme.colorScheme.onBackground
-                        }
+            },
+            floatingActionButtonPosition = FabPosition.End
+        ) { padding ->
+            Column(modifier = Modifier.padding(padding).padding(16.dp)) {
+                if (negocios.isEmpty()) {
+                    Text("No tienes negocios registrados.")
+                } else {
+                    LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        items(negocios) { negocio ->
+                            val color = when (negocio.estado) {
+                                "verificado" -> MaterialTheme.colorScheme.primary
+                                "en_revision" -> MaterialTheme.colorScheme.tertiary
+                                "rechazado" -> MaterialTheme.colorScheme.error
+                                else -> MaterialTheme.colorScheme.onBackground
+                            }
 
-                        Button(
-                            onClick = {
-                                navController.navigate(AppScreens.DetalleNegocioScreen.createRoute(negocio.negocio_id))
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = color),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(negocio.nombre)
+                            Button(
+                                onClick = {
+                                    navController.navigate(AppScreens.DetalleNegocioScreen.createRoute(negocio.negocio_id))
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = color),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(negocio.nombre)
+                            }
                         }
                     }
                 }

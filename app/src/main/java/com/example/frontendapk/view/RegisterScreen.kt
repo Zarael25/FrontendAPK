@@ -90,6 +90,10 @@ fun RegisterScreen(navController: NavController, modifier: Modifier = Modifier) 
                         override fun onResponse(call: Call<User>, response: Response<User>) {
                             if (response.isSuccessful) {
                                 Toast.makeText(context, "Usuario registrado exitosamente", Toast.LENGTH_SHORT).show()
+                                navController.navigate("login_screen") {
+                                    popUpTo("register_screen") { inclusive = true }
+                                }
+
                             } else {
                                 Toast.makeText(context, "Error en el registro", Toast.LENGTH_SHORT).show()
                                 Log.d("REGISTRO", "Código HTTP: ${response.code()} - Error: ${response.errorBody()?.string()}")

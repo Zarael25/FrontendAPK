@@ -151,8 +151,23 @@ fun RegistroNegocioScreen(navController: NavController) {
                                         Toast.makeText(context, "Negocio registrado correctamente", Toast.LENGTH_SHORT).show()
                                         navController.popBackStack() // Volver atrás
                                     } else {
-                                        Log.e("RegistroNegocio", "Error HTTP: ${response.code()}")
-                                        Toast.makeText(context, "Error al registrar el negocio", Toast.LENGTH_SHORT).show()
+                                        val errorBody = response.errorBody()?.string()
+                                        if (!errorBody.isNullOrEmpty()) {
+                                            try {
+                                                val jsonError = org.json.JSONObject(errorBody)
+                                                val detailMessage = jsonError.optString("detail")
+                                                if (detailMessage.isNotEmpty()) {
+                                                    Toast.makeText(context, detailMessage, Toast.LENGTH_LONG).show()
+                                                } else {
+                                                    Toast.makeText(context, "Error al registrar el negocio", Toast.LENGTH_SHORT).show()
+                                                }
+                                            } catch (e: Exception) {
+                                                Toast.makeText(context, "Error al procesar el error del servidor", Toast.LENGTH_SHORT).show()
+                                            }
+                                        } else {
+                                            Toast.makeText(context, "Error al registrar el negocio", Toast.LENGTH_SHORT).show()
+                                        }
+                                        Log.e("RegistroNegocio", "Error HTTP: ${response.code()} - $errorBody")
                                     }
                                 }
 

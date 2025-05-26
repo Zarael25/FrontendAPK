@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
+import com.example.frontendapk.navigation.AppScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,18 +29,27 @@ fun PerfilScreen(navController: NavController) {
     val context = LocalContext.current
     val apiService = RetrofitClient.apiService
 
+    // Estados para los datos de perfil
     var username by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
     var nombre by remember { mutableStateOf("") }
     var estado by remember { mutableStateOf("") }
     var suscripcion by remember { mutableStateOf("") }
 
-    LaunchedEffect(Unit) {
-        val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val token = prefs.getString("ACCESS_TOKEN", null)
+    // Obtener token de SharedPreferences
+    val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+    val token = prefs.getString("ACCESS_TOKEN", null)
 
-        if (!token.isNullOrEmpty()) {
-            apiService.getUserProfile("Bearer $token").enqueue(object: Callback<UserProfileResponse> {
+    // Validar si el usuario está autenticado, si no, navegar a LoginScreen
+    LaunchedEffect(token) {
+        if (token.isNullOrEmpty()) {
+            navController.navigate(AppScreens.LoginScreen.route) {
+                // Limpiar backstack para que no pueda volver a esta pantalla sin logearse
+                popUpTo(0) { inclusive = true }
+            }
+        } else {
+            // Si hay token, hacer la petición para obtener perfil
+            apiService.getUserProfile("Bearer $token").enqueue(object : Callback<UserProfileResponse> {
                 override fun onResponse(
                     call: Call<UserProfileResponse>,
                     response: Response<UserProfileResponse>
@@ -54,12 +64,16 @@ fun PerfilScreen(navController: NavController) {
                             suscripcion = profile.suscripcion
                         }
                     } else {
-                        Log.e("PerfilScreen", "Error HTTP: ${response.code()}")
+                        // Si el token no es válido o hay error, también redirigir a login
+                        navController.navigate(AppScreens.LoginScreen.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 }
 
                 override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
-                    Log.e("PerfilScreen", "Error en llamada retrofit: ${t.message}")
+                    // En fallo de conexión también podrías decidir redirigir o mostrar error
+                    // Por simplicidad aquí no redirigimos
                 }
             })
         }

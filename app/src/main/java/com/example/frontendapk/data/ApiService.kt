@@ -43,4 +43,16 @@ interface ApiService {
         @Body negocio: NegocioRequest
     ): Call<Negocio>
 
+    @PATCH("api/negocios/{id}/ocultar/")
+    fun ocultarNegocio(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Call<Map<String, String>>
+
+    @POST("api/atenciones/")
+    fun crearFila(
+        @Header("Authorization") token: String,
+        @Body fila: FilaRequest
+    ): Call<Unit>
+
 }

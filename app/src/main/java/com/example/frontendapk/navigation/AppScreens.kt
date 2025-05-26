@@ -14,5 +14,12 @@ sealed class AppScreens(val route: String) {
     object EditarNegocioScreen : AppScreens("editar_negocio/{negocioId}") {
         fun createRoute(negocioId: Int) = "editar_negocio/$negocioId"
     }
+    object RegistroFilaScreen : AppScreens("registro_fila_screen/{negocioId}") {
+        fun createRoute(negocioId: Int) = "registro_fila_screen/$negocioId"
+    }
+
+    object TusFilasScreen : AppScreens("tus_filas_screen/{negocioId}") {
+        fun createRoute(negocioId: Int) = "tus_filas_screen/$negocioId"
+    }
 
 }

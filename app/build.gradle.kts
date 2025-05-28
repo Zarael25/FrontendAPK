@@ -29,6 +29,19 @@ android {
             )
         }
     }
+
+    applicationVariants.configureEach {
+        outputs.configureEach {
+            val outputImpl = this as? com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            outputImpl?.outputFileName = "FilasVirtuales-${name}-${versionName}.apk"
+        }
+    }
+
+
+
+
+
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

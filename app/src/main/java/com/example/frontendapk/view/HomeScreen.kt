@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.runtime.LaunchedEffect
+import com.example.frontendapk.navigation.AppScreens
 
 @Composable
 fun HomeScreen(navController: NavController, nombre: String) {
@@ -100,7 +101,7 @@ fun HomeScreen(navController: NavController, nombre: String) {
             }
 
             Button(
-                onClick = { navController.navigate("negocios_screen") },
+                onClick = { navController.navigate(AppScreens.NegociosVerificadosScreen.route) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)

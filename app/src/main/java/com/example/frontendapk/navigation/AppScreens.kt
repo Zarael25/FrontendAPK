@@ -29,4 +29,7 @@ sealed class AppScreens(val route: String) {
     object EditarFilaScreen : AppScreens("editar_fila/{filaId}") {
         fun createRoute(filaId: Int) = "editar_fila/$filaId"
     }
+
+    object NegociosVerificadosScreen : AppScreens("negocios_verificados_screen")
+
 }

@@ -22,6 +22,7 @@ import com.example.frontendapk.view.RegistroFilaScreen
 import com.example.frontendapk.view.TusFilasScreen
 import com.example.frontendapk.view.DetalleFilaScreen
 import com.example.frontendapk.view.EditarFilaScreen
+import com.example.frontendapk.view.NegociosVerificadosScreen
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
@@ -110,6 +111,12 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
             val filaId = backStackEntry.arguments?.getInt("filaId") ?: 0
             EditarFilaScreen(navController, filaId)
         }
+
+
+        composable(AppScreens.NegociosVerificadosScreen.route) {
+            NegociosVerificadosScreen(navController)
+        }
+
 
     }
 }

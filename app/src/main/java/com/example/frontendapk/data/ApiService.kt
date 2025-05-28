@@ -74,5 +74,10 @@ interface ApiService {
         @Body datos: Map<String, @JvmSuppressWildcards Any>
     ): Call<Void>
 
+    @GET("api/negocios/verificados/")
+    fun getNegociosVerificados(
+        @Header("Authorization") token: String
+    ): Call<List<Negocio>>
+
 
 }

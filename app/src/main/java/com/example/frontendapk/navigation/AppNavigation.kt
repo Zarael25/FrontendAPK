@@ -23,6 +23,7 @@ import com.example.frontendapk.view.TusFilasScreen
 import com.example.frontendapk.view.DetalleFilaScreen
 import com.example.frontendapk.view.EditarFilaScreen
 import com.example.frontendapk.view.NegociosVerificadosScreen
+import com.example.frontendapk.view.FilasVisiblesScreen
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
@@ -117,6 +118,12 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
             NegociosVerificadosScreen(navController)
         }
 
-
+        composable(
+            route = AppScreens.FilasVisiblesScreen.route,
+            arguments = listOf(navArgument("negocioId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val negocioId = backStackEntry.arguments?.getInt("negocioId") ?: return@composable
+            FilasVisiblesScreen(navController = navController, negocioId = negocioId)
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.example.frontendapk.data
 
-data class Atencion(
-    val atencion_id: Int,
+data class FilaAtencion(
+    val fila_atencion_id: Int,
     val nombre: String,
     val cantidad_tickets: Int,
     val visible: Boolean,

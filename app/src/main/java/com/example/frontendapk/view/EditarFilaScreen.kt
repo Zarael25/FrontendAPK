@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.frontendapk.data.Atencion
+import com.example.frontendapk.data.FilaAtencion
 import com.example.frontendapk.data.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,8 +37,8 @@ fun EditarFilaScreen(navController: NavController, filaId: Int) {
         val token = prefs.getString("ACCESS_TOKEN", null)
 
         if (!token.isNullOrEmpty()) {
-            apiService.getFilaPorId("Bearer $token", filaId).enqueue(object : Callback<com.example.frontendapk.data.Atencion> {
-                override fun onResponse(call: Call<com.example.frontendapk.data.Atencion>, response: Response<com.example.frontendapk.data.Atencion>) {
+            apiService.getFilaPorId("Bearer $token", filaId).enqueue(object : Callback<com.example.frontendapk.data.FilaAtencion> {
+                override fun onResponse(call: Call<com.example.frontendapk.data.FilaAtencion>, response: Response<com.example.frontendapk.data.FilaAtencion>) {
                     if (response.isSuccessful) {
                         response.body()?.let {
                             nombre = it.nombre ?: ""
@@ -54,7 +54,7 @@ fun EditarFilaScreen(navController: NavController, filaId: Int) {
                     }
                 }
 
-                override fun onFailure(call: Call<com.example.frontendapk.data.Atencion>, t: Throwable) {
+                override fun onFailure(call: Call<com.example.frontendapk.data.FilaAtencion>, t: Throwable) {
                     Log.e("EditarFila", "Error: ${t.message}")
                     Toast.makeText(context, "Error de red", Toast.LENGTH_SHORT).show()
                     cargando = false

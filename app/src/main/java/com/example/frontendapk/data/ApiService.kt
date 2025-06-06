@@ -8,7 +8,7 @@ import retrofit2.http.Header
 
 import retrofit2.http.PATCH
 import retrofit2.http.Path
-
+import retrofit2.http.Query
 
 interface ApiService {
     @POST("api/registro/")
@@ -49,7 +49,7 @@ interface ApiService {
         @Path("id") id: Int
     ): Call<Map<String, String>>
 
-    @POST("api/atenciones/")
+    @POST("api/filas/")
     fun crearFila(
         @Header("Authorization") token: String,
         @Body fila: FilaRequest
@@ -59,15 +59,15 @@ interface ApiService {
     fun getFilasPorNegocio(
         @Header("Authorization") token: String,
         @Path("id_negocio") idNegocio: Int
-    ): Call<List<Atencion>>
+    ): Call<List<FilaAtencion>>
 
-    @GET("api/atenciones/{id}/")
+    @GET("api/filas/{id}/")
     fun getFilaPorId(
         @Header("Authorization") token: String,
         @Path("id") id: Int
-    ): Call<Atencion>
+    ): Call<FilaAtencion>
 
-    @PATCH("api/atenciones/{id_fila}/editar-parcial/")
+    @PATCH("api/filas/{id_fila}/editar-parcial/")
     fun editarFilaParcial(
         @Header("Authorization") token: String,
         @Path("id_fila") filaId: Int,
@@ -76,8 +76,17 @@ interface ApiService {
 
     @GET("api/negocios/verificados/")
     fun getNegociosVerificados(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Query("search") search: String
     ): Call<List<Negocio>>
+
+    @GET("api/negocios/{id}/filas_visibles/")
+    fun getFilasVisibles(
+        @Path("id") negocioId: Int,
+        @Header("Authorization") token: String
+    ): Call<List<FilaAtencion>>
+
+
 
 
 }

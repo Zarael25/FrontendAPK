@@ -16,7 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.navigation.NavController
 import com.example.frontendapk.navigation.AppScreens
 import com.example.frontendapk.data.RetrofitClient
-import com.example.frontendapk.data.Atencion
+import com.example.frontendapk.data.FilaAtencion
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,7 +26,7 @@ import retrofit2.Response
 fun TusFilasScreen(navController: NavController, negocioId: Int) {
     val context = LocalContext.current
     val apiService = RetrofitClient.apiService
-    var filas by remember { mutableStateOf<List<Atencion>>(emptyList()) }
+    var filas by remember { mutableStateOf<List<FilaAtencion>>(emptyList()) }
 
     // Token desde preferencias
     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -36,14 +36,14 @@ fun TusFilasScreen(navController: NavController, negocioId: Int) {
     LaunchedEffect(negocioId) {
         if (!token.isNullOrEmpty()) {
             apiService.getFilasPorNegocio("Bearer $token", negocioId)
-                .enqueue(object : Callback<List<Atencion>> {
-                    override fun onResponse(call: Call<List<Atencion>>, response: Response<List<Atencion>>) {
+                .enqueue(object : Callback<List<FilaAtencion>> {
+                    override fun onResponse(call: Call<List<FilaAtencion>>, response: Response<List<FilaAtencion>>) {
                         if (response.isSuccessful) {
                             filas = response.body() ?: emptyList()
                         }
                     }
 
-                    override fun onFailure(call: Call<List<Atencion>>, t: Throwable) {
+                    override fun onFailure(call: Call<List<FilaAtencion>>, t: Throwable) {
                         Log.e("TusFilasScreen", "Error al obtener filas: ${t.message}")
                     }
                 })
@@ -97,7 +97,7 @@ fun TusFilasScreen(navController: NavController, negocioId: Int) {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     items(filas) { fila ->
                         Button(
-                            onClick = { navController.navigate(AppScreens.DetalleFilaScreen.createRoute(fila.atencion_id))
+                            onClick = { navController.navigate(AppScreens.DetalleFilaScreen.createRoute(fila.fila_atencion_id))
                             },
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(

@@ -30,37 +30,40 @@ fun NegociosVerificadosScreen(navController: NavController) {
     var negocios by remember { mutableStateOf<List<Negocio>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    var searchText by remember { mutableStateOf("") }
 
-    LaunchedEffect(Unit) {
+    fun buscarNegocios(search: String) {
+        isLoading = true
         val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val token = sharedPreferences.getString("ACCESS_TOKEN", null)
-        Log.d("NegociosVerificados", "Token obtenido: $token")
 
         if (token != null) {
-            apiService.getNegociosVerificados("Bearer $token")
+            apiService.getNegociosVerificados("Bearer $token", search)
                 .enqueue(object : Callback<List<Negocio>> {
                     override fun onResponse(call: Call<List<Negocio>>, response: Response<List<Negocio>>) {
                         isLoading = false
                         if (response.isSuccessful) {
                             negocios = response.body() ?: emptyList()
-                            Log.d("NegociosVerificados", "Negocios recibidos: ${negocios.size}")
                         } else {
                             errorMessage = "Error HTTP: ${response.code()}"
-                            Log.e("NegociosVerificados", errorMessage!!)
                         }
                     }
 
                     override fun onFailure(call: Call<List<Negocio>>, t: Throwable) {
                         isLoading = false
                         errorMessage = "Error Retrofit: ${t.message}"
-                        Log.e("NegociosVerificados", errorMessage!!)
                     }
                 })
         } else {
             isLoading = false
-            errorMessage = "Token no encontrado en SharedPreferences"
-            Log.e("NegociosVerificados", errorMessage!!)
+            errorMessage = "Token no encontrado"
         }
+    }
+
+
+
+    LaunchedEffect(searchText) {
+        buscarNegocios(searchText)
     }
 
     Scaffold(
@@ -75,21 +78,39 @@ fun NegociosVerificadosScreen(navController: NavController) {
             )
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding).padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(16.dp)
+                .fillMaxSize()
+        ) {
+            // Buscador
+            OutlinedTextField(
+                value = searchText,
+                onValueChange = { searchText = it },
+                label = { Text("Buscar negocio") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
+                singleLine = true
+            )
+
             when {
                 isLoading -> {
                     CircularProgressIndicator(modifier = Modifier.fillMaxWidth().wrapContentWidth())
                 }
+
                 errorMessage != null -> {
                     Text(
                         text = errorMessage ?: "Error desconocido",
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.fillMaxWidth()
+                        color = MaterialTheme.colorScheme.error
                     )
                 }
+
                 negocios.isEmpty() -> {
                     Text("No hay negocios verificados.")
                 }
+
                 else -> {
                     LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         items(negocios) { negocio ->
@@ -106,7 +127,7 @@ fun NegociosVerificadosScreen(navController: NavController) {
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Button(
                                         onClick = {
-
+                                            navController.navigate(AppScreens.FilasVisiblesScreen.createRoute(negocio.negocio_id))
                                         },
                                         modifier = Modifier.fillMaxWidth()
                                     ) {

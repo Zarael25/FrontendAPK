@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.frontendapk.data.Atencion
+import com.example.frontendapk.data.FilaAtencion
 import com.example.frontendapk.data.RetrofitClient
 import com.example.frontendapk.navigation.AppScreens
 import retrofit2.Call
@@ -24,7 +24,7 @@ import android.widget.Toast
 fun DetalleFilaScreen(navController: NavController, filaId: Int) {
     val context = LocalContext.current
     val apiService = RetrofitClient.apiService
-    var fila by remember { mutableStateOf<Atencion?>(null) }
+    var fila by remember { mutableStateOf<FilaAtencion?>(null) }
     var cargando by remember { mutableStateOf(true) }
 
     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -33,8 +33,8 @@ fun DetalleFilaScreen(navController: NavController, filaId: Int) {
     LaunchedEffect(filaId) {
         if (!token.isNullOrEmpty()) {
             apiService.getFilaPorId("Bearer $token", filaId)
-                .enqueue(object : Callback<Atencion> {
-                    override fun onResponse(call: Call<Atencion>, response: Response<Atencion>) {
+                .enqueue(object : Callback<FilaAtencion> {
+                    override fun onResponse(call: Call<FilaAtencion>, response: Response<FilaAtencion>) {
                         if (response.isSuccessful) {
                             fila = response.body()
                         } else {
@@ -42,7 +42,7 @@ fun DetalleFilaScreen(navController: NavController, filaId: Int) {
                         }
                         cargando = false
                     }
-                    override fun onFailure(call: Call<Atencion>, t: Throwable) {
+                    override fun onFailure(call: Call<FilaAtencion>, t: Throwable) {
                         Log.e("DetalleFilaScreen", "Error al obtener detalle: ${t.message}")
                         Toast.makeText(context, "Error de red", Toast.LENGTH_SHORT).show()
                         cargando = false

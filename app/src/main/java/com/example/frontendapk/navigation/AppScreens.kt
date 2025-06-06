@@ -32,4 +32,9 @@ sealed class AppScreens(val route: String) {
 
     object NegociosVerificadosScreen : AppScreens("negocios_verificados_screen")
 
+    object FilasVisiblesScreen : AppScreens("filas_visibles/{negocioId}") {
+        fun createRoute(negocioId: Int) = "filas_visibles/$negocioId"
+    }
+
+
 }

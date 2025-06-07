@@ -24,6 +24,9 @@ import com.example.frontendapk.view.DetalleFilaScreen
 import com.example.frontendapk.view.EditarFilaScreen
 import com.example.frontendapk.view.NegociosVerificadosScreen
 import com.example.frontendapk.view.FilasVisiblesScreen
+import com.example.frontendapk.view.GenerarTicketScreen
+import com.example.frontendapk.view.DetalleTicketScreen
+import com.example.frontendapk.view.TusTicketsScreen
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
@@ -124,6 +127,27 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
         ) { backStackEntry ->
             val negocioId = backStackEntry.arguments?.getInt("negocioId") ?: return@composable
             FilasVisiblesScreen(navController = navController, negocioId = negocioId)
+        }
+
+
+        composable(
+            route = AppScreens.GenerarTicketScreen.route,
+            arguments = listOf(navArgument("filaId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val filaId = backStackEntry.arguments?.getInt("filaId") ?: 0
+            GenerarTicketScreen(navController, filaId)
+        }
+
+        composable("detalle_ticket/{ticketId}") { backStackEntry ->
+            val ticketId = backStackEntry.arguments?.getString("ticketId")?.toIntOrNull()
+            if (ticketId != null) {
+                DetalleTicketScreen(navController, ticketId)
+            }
+        }
+
+
+        composable(AppScreens.TusTicketsScreen.route) {
+            TusTicketsScreen(navController)
         }
     }
 }

@@ -86,7 +86,23 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<List<FilaAtencion>>
 
+    @POST("api/tickets/generar/")
+    fun generarTicket(
+        @Body body: Map<String, Int>,
+        @Header("Authorization") token: String
+    ): Call<TicketGenerado>
 
+
+    @GET("api/usuario_tickets/detalle-por-ticket/{ticket_id}/")
+    fun getDetalleTicket(
+        @Path("ticket_id") ticketId: Int,
+        @Header("Authorization") token: String
+    ): Call<DetalleTicket>
+
+    @GET("api/usuario_tickets/mis-tickets/")
+    fun getMisTickets(
+        @Header("Authorization") token: String
+    ): Call<List<DetalleTicket>>
 
 
 }

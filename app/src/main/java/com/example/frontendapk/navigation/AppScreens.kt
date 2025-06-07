@@ -36,5 +36,14 @@ sealed class AppScreens(val route: String) {
         fun createRoute(negocioId: Int) = "filas_visibles/$negocioId"
     }
 
+    object GenerarTicketScreen {
+        const val route = "generar_ticket/{filaId}"
+        fun createRoute(filaId: Int) = "generar_ticket/$filaId"
+    }
 
+    object DetalleTicketScreen : AppScreens("detalle_ticket/{ticketId}") {
+        fun createRoute(ticketId: Int) = "detalle_ticket/$ticketId"
+    }
+
+    object TusTicketsScreen : AppScreens("tus_tickets_screen")
 }

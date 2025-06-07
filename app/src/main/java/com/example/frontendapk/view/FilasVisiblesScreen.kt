@@ -19,7 +19,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-
+import com.example.frontendapk.navigation.AppScreens
+import com.example.frontendapk.data.TicketGenerado
+import android.widget.Toast
+import org.json.JSONObject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,7 +86,57 @@ fun FilasVisiblesScreen(navController: NavController, negocioId: Int) {
                                     Text("Nombre: ${fila.nombre}")
                                     Text("Horario: ${fila.apertura} - ${fila.finalizacion}")
                                     Text("Periodo: ${fila.periodo_atencion}")
-                                    Text("Tickets: ${fila.cantidad_tickets}")
+                                    Text("Tickets: ${fila.numero_ticket_actual}/${fila.cantidad_tickets}")
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Button(
+                                        onClick = {
+                                            val token = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                                                .getString("ACCESS_TOKEN", null)
+
+                                            if (token != null) {
+                                                val body = mapOf("fila_atencion" to fila.fila_atencion_id)
+
+                                                RetrofitClient.apiService.generarTicket(body, "Bearer $token")
+                                                    .enqueue(object : Callback<TicketGenerado> {
+                                                        override fun onResponse(call: Call<TicketGenerado>, response: Response<TicketGenerado>) {
+                                                            if (response.isSuccessful) {
+                                                                val ticketId = response.body()?.ticket_id
+                                                                if (ticketId != null) {
+                                                                    navController.navigate(AppScreens.DetalleTicketScreen.createRoute(ticketId))
+                                                                }
+                                                            } else {
+                                                                val errorBody = response.errorBody()?.string()
+                                                                if (!errorBody.isNullOrEmpty()) {
+                                                                    try {
+                                                                        val errorJson = JSONObject(errorBody)
+                                                                        Toast.makeText(context, errorJson.optString("error", "Error al generar ticket."), Toast.LENGTH_LONG).show()
+
+                                                                    } catch (e: Exception) {
+                                                                        Toast.makeText(context, "Error inesperado.", Toast.LENGTH_LONG).show()
+                                                                    }
+                                                                } else {
+                                                                    Toast.makeText(context, "No se pudo leer el error.", Toast.LENGTH_LONG).show()
+                                                                }
+                                                            }
+                                                        }
+
+                                                        override fun onFailure(call: Call<TicketGenerado>, t: Throwable) {
+                                                            Log.e("GenerarTicket", "Error: ${t.message}")
+                                                        }
+                                                    })
+                                            }
+                                        },
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Text("Obtener ticket")
+                                    }
+
+
+
+
+
                                 }
                             }
                         }

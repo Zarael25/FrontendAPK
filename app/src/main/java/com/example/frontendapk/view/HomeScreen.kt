@@ -92,12 +92,12 @@ fun HomeScreen(navController: NavController, nombre: String) {
             )
 
             Button(
-                onClick = { navController.navigate("filas_screen") },
+                onClick = { navController.navigate(AppScreens.TusTicketsScreen.route) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
             ) {
-                Text("Ver filas")
+                Text("Ver Tickets")
             }
 
             Button(

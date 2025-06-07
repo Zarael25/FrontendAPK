@@ -131,7 +131,7 @@ fun NegociosVerificadosScreen(navController: NavController) {
                                         },
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
-                                        Text("Obtener ticket")
+                                        Text("Ver Filas de Atención")
                                     }
                                 }
                             }

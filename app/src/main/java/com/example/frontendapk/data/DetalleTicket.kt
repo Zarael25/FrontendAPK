@@ -1,6 +1,7 @@
 package com.example.frontendapk.data
 
 data class DetalleTicket(
+    val ticket_id: Int,
     val nombre: String,
     val correo: String,
     val estado: String,

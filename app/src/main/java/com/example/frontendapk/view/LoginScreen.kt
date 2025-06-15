@@ -93,7 +93,24 @@ fun LoginScreen(navController: NavController) {
                                     popUpTo("login_screen") { inclusive = true }
                                 }
                             } else {
-                                Toast.makeText(context, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
+                                val errorBody = response.errorBody()?.string()
+                                val mensajeError = try {
+                                    val jsonObj = org.json.JSONObject(errorBody ?: "")
+                                    val mensaje = jsonObj.optString("error", "Credenciales inválidas")
+
+                                    // Mostrar el mensaje correcto al usuario
+                                    Toast.makeText(context, mensaje, Toast.LENGTH_SHORT).show()
+                                    Log.d("LOGIN", "Mensaje del backend: $mensaje")
+                                    mensaje
+                                } catch (e: Exception) {
+                                    "Credenciales inválidas"
+                                }
+
+
+
+
+
+
                                 Log.d("LOGIN", "Código HTTP: ${response.code()} - Error: ${response.errorBody()?.string()}")
                             }
                         }

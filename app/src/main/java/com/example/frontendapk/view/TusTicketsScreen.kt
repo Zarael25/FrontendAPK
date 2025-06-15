@@ -96,7 +96,7 @@ fun TusTicketsScreen(navController: NavController) {
 
                         Button(
                             onClick = {
-                                // Por ahora no navega, luego se agregará la navegación a detalle
+                                navController.navigate(AppScreens.DetalleTicketScreen.createRoute(ticket.ticket_id))
                             },
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(containerColor = buttonColor)

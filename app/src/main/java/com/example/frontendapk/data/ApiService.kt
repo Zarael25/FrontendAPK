@@ -104,5 +104,10 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<List<DetalleTicket>>
 
+    @POST("api/usuario_tickets/{ticket_id}/cancelar/")
+    fun cancelarTicket(
+        @Path("ticket_id") ticketId: Int,
+        @Header("Authorization") authHeader: String
+    ): Call<Map<String, String>>
 
 }

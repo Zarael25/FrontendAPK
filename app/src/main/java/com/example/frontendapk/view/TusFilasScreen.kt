@@ -17,9 +17,12 @@ import androidx.navigation.NavController
 import com.example.frontendapk.navigation.AppScreens
 import com.example.frontendapk.data.RetrofitClient
 import com.example.frontendapk.data.FilaAtencion
+import com.example.frontendapk.data.Negocio
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.widget.Toast
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,6 +30,9 @@ fun TusFilasScreen(navController: NavController, negocioId: Int) {
     val context = LocalContext.current
     val apiService = RetrofitClient.apiService
     var filas by remember { mutableStateOf<List<FilaAtencion>>(emptyList()) }
+    var estadoNegocio by remember { mutableStateOf<String?>(null) }
+
+
 
     // Token desde preferencias
     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -35,6 +41,21 @@ fun TusFilasScreen(navController: NavController, negocioId: Int) {
     // Obtener filas del negocio
     LaunchedEffect(negocioId) {
         if (!token.isNullOrEmpty()) {
+            // Obtener estado del negocio
+            apiService.getNegocioPorId("Bearer $token", negocioId)
+                .enqueue(object : Callback<Negocio> {
+                    override fun onResponse(call: Call<Negocio>, response: Response<Negocio>) {
+                        if (response.isSuccessful) {
+                            estadoNegocio = response.body()?.estado
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Negocio>, t: Throwable) {
+                        Log.e("TusFilasScreen", "Error al obtener negocio: ${t.message}")
+                    }
+                })
+
+
             apiService.getFilasPorNegocio("Bearer $token", negocioId)
                 .enqueue(object : Callback<List<FilaAtencion>> {
                     override fun onResponse(call: Call<List<FilaAtencion>>, response: Response<List<FilaAtencion>>) {
@@ -67,18 +88,24 @@ fun TusFilasScreen(navController: NavController, negocioId: Int) {
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
+                val esVerificado = estadoNegocio == "verificado"
                 FloatingActionButton(
                     onClick = {
-                        navController.navigate(AppScreens.RegistroFilaScreen.createRoute(negocioId))
+                        if (esVerificado) {
+                            navController.navigate(AppScreens.RegistroFilaScreen.createRoute(negocioId))
+                        }
+                        else {
+                            Toast.makeText(context, "Solo los negocios verificados pueden crear filas", Toast.LENGTH_SHORT).show()
+                        }
                     },
-                    containerColor = MaterialTheme.colorScheme.primary,
+                    containerColor = if (esVerificado) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
                     modifier = Modifier.align(androidx.compose.ui.Alignment.BottomEnd),
                     shape = CircleShape
                 ) {
                     Text(
                         "+",
                         style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = if (esVerificado) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

@@ -30,6 +30,7 @@ fun EditarFilaScreen(navController: NavController, filaId: Int) {
     var apertura by remember { mutableStateOf("") }
     var finalizacion by remember { mutableStateOf("") }
     var cargando by remember { mutableStateOf(true) }
+    var permitirCancelacion by remember { mutableStateOf(true) }
 
     // Obtener datos actuales
     LaunchedEffect(filaId) {
@@ -46,6 +47,7 @@ fun EditarFilaScreen(navController: NavController, filaId: Int) {
                             periodoAtencion = it.periodo_atencion ?: ""
                             apertura = it.apertura ?: ""
                             finalizacion = it.finalizacion ?: ""
+                            permitirCancelacion = it.permitir_cancelacion
                         }
                         cargando = false
                     } else {
@@ -95,6 +97,17 @@ fun EditarFilaScreen(navController: NavController, filaId: Int) {
             OutlinedTextField(value = apertura, onValueChange = { apertura = it }, label = { Text("Hora de Apertura (HH:mm:ss)") })
             OutlinedTextField(value = finalizacion, onValueChange = { finalizacion = it }, label = { Text("Hora de Finalización (HH:mm:ss)") })
 
+            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                Text("¿Permitir cancelación de tickets?")
+                Spacer(modifier = Modifier.width(8.dp))
+                Switch(
+                    checked = permitirCancelacion,
+                    onCheckedChange = { permitirCancelacion = it }
+                )
+            }
+
+
+
             Button(
                 onClick = {
                     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -108,6 +121,7 @@ fun EditarFilaScreen(navController: NavController, filaId: Int) {
                         datos["periodo_atencion"] = periodoAtencion
                         datos["apertura"] = apertura
                         datos["finalizacion"] = finalizacion
+                        datos["permitir_cancelacion"] = permitirCancelacion
 
                         apiService.editarFilaParcial("Bearer $token", filaId, datos)
                             .enqueue(object : Callback<Void> {

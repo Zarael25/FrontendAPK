@@ -9,5 +9,6 @@ data class DetalleTicket(
     val fecha_hora_atencion: String,
     val posicion: Int,
     val fila_nombre: String,
-    val negocio_nombre: String
+    val negocio_nombre: String,
+    val permitir_cancelacion: Boolean
 )

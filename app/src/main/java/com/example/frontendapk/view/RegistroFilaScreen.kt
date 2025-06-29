@@ -27,6 +27,7 @@ fun RegistroFilaScreen(navController: NavController, negocioId: Int) {
     var nombre by remember { mutableStateOf("") }
     var cantidadTickets by remember { mutableStateOf("") }
     var visible by remember { mutableStateOf(true) }
+    var permitirCancelacion by remember { mutableStateOf(true) }
     var periodoAtencion by remember { mutableStateOf("") }
     var apertura by remember { mutableStateOf("") }
     var finalizacion by remember { mutableStateOf("") }
@@ -85,6 +86,19 @@ fun RegistroFilaScreen(navController: NavController, negocioId: Int) {
                 )
             }
 
+            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                Text("¿Permitir cancelación de tickets?")
+                Spacer(Modifier.width(8.dp))
+                Switch(
+                    checked = permitirCancelacion,
+                    onCheckedChange = { permitirCancelacion = it }
+                )
+            }
+
+
+
+
+
             Button(
                 onClick = {
                     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -99,7 +113,8 @@ fun RegistroFilaScreen(navController: NavController, negocioId: Int) {
                             apertura = apertura,
                             finalizacion = finalizacion,
                             negocio = negocioId,
-                            numero_ticket_actual = 0
+                            numero_ticket_actual = 0,
+                            permitir_cancelacion = permitirCancelacion
                         )
 
                         apiService.crearFila("Bearer $token", fila)

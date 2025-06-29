@@ -19,6 +19,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import android.widget.Toast
 import com.example.frontendapk.navigation.AppScreens
 
+import androidx.compose.ui.graphics.Color
+import com.example.frontendapk.ui.theme.GrayDark
 
 
 
@@ -33,6 +35,7 @@ fun DetalleTicketScreen(navController: NavController, ticketId: Int) {
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var isCancelling by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) } // Para mostrar el diálogo de confirmación
+
 
     LaunchedEffect(ticketId) {
         val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -96,7 +99,11 @@ fun DetalleTicketScreen(navController: NavController, ticketId: Int) {
 
                     Button(
                         onClick = { showDialog = true },
-                        enabled = !isCancelling,
+                        enabled = !isCancelling && detalle?.estado == "activo",
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (!isCancelling && detalle?.estado == "activo") MaterialTheme.colorScheme.primary else GrayDark,
+                            contentColor = if (!isCancelling && detalle?.estado == "activo") MaterialTheme.colorScheme.onPrimary else Color.LightGray
+                        ),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(if (isCancelling) "Cancelando..." else "Cancelar Ticket")
@@ -110,7 +117,20 @@ fun DetalleTicketScreen(navController: NavController, ticketId: Int) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
             title = { Text("¿Estás seguro?") },
-            text = { Text("Esta acción cancelará tu ticket y tu cuenta sera suspendida.") },
+
+
+
+            text = { Text(
+                if (detalle?.permitir_cancelacion == true)
+                    "Esta acción cancelará tu ticket."
+                else
+                    "Esta acción cancelará tu ticket y tu cuenta será suspendida."
+            ) },
+
+
+
+
+
             confirmButton = {
                 TextButton(onClick = {
                     showDialog = false
@@ -130,12 +150,17 @@ fun DetalleTicketScreen(navController: NavController, ticketId: Int) {
                                         val mensaje = response.body()?.get("mensaje") ?: "Ticket cancelado"
                                         Toast.makeText(context, mensaje, Toast.LENGTH_LONG).show()
 
-                                        // Cerrar sesión: borrar el token
-                                        sharedPreferences.edit().clear().apply()
-
-                                        // Redirigir al login y limpiar historial
-                                        navController.navigate(AppScreens.LoginScreen.route) {
-                                            popUpTo(0) { inclusive = true }
+                                        if (detalle?.permitir_cancelacion == true) {
+                                            // No cerrar sesión, solo ir a TusTicketsScreen
+                                            navController.navigate(AppScreens.TusTicketsScreen.route) {
+                                                popUpTo(AppScreens.TusTicketsScreen.route) { inclusive = true }
+                                            }
+                                        } else {
+                                            // Cerrar sesión y navegar a Login
+                                            sharedPreferences.edit().clear().apply()
+                                            navController.navigate(AppScreens.LoginScreen.route) {
+                                                popUpTo(0) { inclusive = true }
+                                            }
                                         }
                                     } else {
                                         val errorBody = response.errorBody()?.string()

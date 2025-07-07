@@ -86,18 +86,6 @@ fun RegistroFilaScreen(navController: NavController, negocioId: Int) {
                 )
             }
 
-            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                Text("¿Permitir cancelación de tickets?")
-                Spacer(Modifier.width(8.dp))
-                Switch(
-                    checked = permitirCancelacion,
-                    onCheckedChange = { permitirCancelacion = it }
-                )
-            }
-
-
-
-
 
             Button(
                 onClick = {
@@ -113,8 +101,8 @@ fun RegistroFilaScreen(navController: NavController, negocioId: Int) {
                             apertura = apertura,
                             finalizacion = finalizacion,
                             negocio = negocioId,
-                            numero_ticket_actual = 0,
-                            permitir_cancelacion = permitirCancelacion
+                            numero_ticket_actual = 0
+
                         )
 
                         apiService.crearFila("Bearer $token", fila)

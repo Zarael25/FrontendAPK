@@ -9,5 +9,8 @@ data class Negocio(
     val doc_respaldo: String?,
     val num_referencia: String,
     val detalle: String,
-    val usuario: Int
+    val usuario: Int,
+    val permite_cancelar: Boolean,
+    val tiempo_limite_cancelacion: Int,
+    val maximo_reservas_diarias: Int
 )

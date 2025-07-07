@@ -9,5 +9,4 @@ data class FilaRequest(
     val finalizacion: String,     // formato: hh:mm:ss
     val negocio: Int,
     val numero_ticket_actual: Int,
-    val permitir_cancelacion: Boolean
 )

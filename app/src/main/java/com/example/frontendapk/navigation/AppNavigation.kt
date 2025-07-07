@@ -27,6 +27,7 @@ import com.example.frontendapk.view.FilasVisiblesScreen
 import com.example.frontendapk.view.GenerarTicketScreen
 import com.example.frontendapk.view.DetalleTicketScreen
 import com.example.frontendapk.view.TusTicketsScreen
+import com.example.frontendapk.view.PoliticasCancelacionReservaScreen
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
@@ -149,5 +150,17 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
         composable(AppScreens.TusTicketsScreen.route) {
             TusTicketsScreen(navController)
         }
+
+        composable(
+            route = AppScreens.PoliticasCancelacionReservaScreen.route, // debe estar definido en AppScreens
+            arguments = listOf(navArgument("negocioId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val negocioId = backStackEntry.arguments?.getInt("negocioId") ?: 0
+            PoliticasCancelacionReservaScreen(navController, negocioId)
+        }
+
+
+
+
     }
 }

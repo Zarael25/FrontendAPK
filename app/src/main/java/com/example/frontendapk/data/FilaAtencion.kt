@@ -10,5 +10,4 @@ data class FilaAtencion(
     val finalizacion: String,
     val numero_ticket_actual: Int,
     val negocio: Int,
-    val permitir_cancelacion: Boolean
 )

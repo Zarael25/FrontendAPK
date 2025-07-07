@@ -84,7 +84,7 @@ fun DetalleFilaScreen(navController: NavController, filaId: Int) {
                 Text("Apertura: ${filaData.apertura}")
                 Text("Finalización: ${filaData.finalizacion}")
                 Text("Ticket Actual: ${filaData.numero_ticket_actual}")
-                Text("¿Permite cancelación?: ${if (filaData.permitir_cancelacion) "Sí" else "No"}")
+                
 
                 Spacer(modifier = Modifier.height(16.dp))
 

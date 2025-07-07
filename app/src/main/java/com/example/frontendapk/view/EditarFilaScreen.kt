@@ -47,7 +47,7 @@ fun EditarFilaScreen(navController: NavController, filaId: Int) {
                             periodoAtencion = it.periodo_atencion ?: ""
                             apertura = it.apertura ?: ""
                             finalizacion = it.finalizacion ?: ""
-                            permitirCancelacion = it.permitir_cancelacion
+
                         }
                         cargando = false
                     } else {
@@ -96,16 +96,6 @@ fun EditarFilaScreen(navController: NavController, filaId: Int) {
             OutlinedTextField(value = periodoAtencion, onValueChange = { periodoAtencion = it }, label = { Text("Periodo de Atención (HH:mm:ss)") })
             OutlinedTextField(value = apertura, onValueChange = { apertura = it }, label = { Text("Hora de Apertura (HH:mm:ss)") })
             OutlinedTextField(value = finalizacion, onValueChange = { finalizacion = it }, label = { Text("Hora de Finalización (HH:mm:ss)") })
-
-            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                Text("¿Permitir cancelación de tickets?")
-                Spacer(modifier = Modifier.width(8.dp))
-                Switch(
-                    checked = permitirCancelacion,
-                    onCheckedChange = { permitirCancelacion = it }
-                )
-            }
-
 
 
             Button(

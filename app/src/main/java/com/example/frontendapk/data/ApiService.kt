@@ -110,4 +110,14 @@ interface ApiService {
         @Header("Authorization") authHeader: String
     ): Call<Map<String, String>>
 
+
+
+    @PATCH("/api/negocios/{id}/editar-politicas/")
+    fun editarPoliticas(
+        @Header("Authorization") token: String,
+        @Path("id") negocioId: Int,
+        @Body request: EditarPoliticasRequest
+    ): Call<Map<String, String>>
+
+
 }

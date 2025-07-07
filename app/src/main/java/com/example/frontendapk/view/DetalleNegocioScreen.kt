@@ -92,7 +92,16 @@ fun DetalleNegocioScreen(navController: NavController, negocioId: Int) {
 
                 Spacer(modifier = Modifier.height(16.dp))  // Espacio entre botones
 
+                Button(
+                    onClick = {
+                        navController.navigate(AppScreens.PoliticasCancelacionReservaScreen.createRoute(negocioId))
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Editar políticas de cancelación y reserva")
+                }
 
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
                     onClick = { showDialog = true },

@@ -46,4 +46,10 @@ sealed class AppScreens(val route: String) {
     }
 
     object TusTicketsScreen : AppScreens("tus_tickets_screen")
+
+    object PoliticasCancelacionReservaScreen : AppScreens("politicas_cancelacion_reserva/{negocioId}") {
+        fun createRoute(negocioId: Int) = "politicas_cancelacion_reserva/$negocioId"
+    }
+
+
 }

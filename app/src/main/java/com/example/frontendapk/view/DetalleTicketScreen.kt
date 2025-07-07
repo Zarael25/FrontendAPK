@@ -21,7 +21,7 @@ import com.example.frontendapk.navigation.AppScreens
 
 import androidx.compose.ui.graphics.Color
 import com.example.frontendapk.ui.theme.GrayDark
-
+import com.example.frontendapk.data.UserProfileResponse
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -117,20 +117,7 @@ fun DetalleTicketScreen(navController: NavController, ticketId: Int) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
             title = { Text("¿Estás seguro?") },
-
-
-
-            text = { Text(
-                if (detalle?.permitir_cancelacion == true)
-                    "Esta acción cancelará tu ticket."
-                else
-                    "Esta acción cancelará tu ticket y tu cuenta será suspendida."
-            ) },
-
-
-
-
-
+            text = { Text("Esta acción cancelará tu ticket y tu cuenta podría ser suspendida.") },
             confirmButton = {
                 TextButton(onClick = {
                     showDialog = false
@@ -141,27 +128,46 @@ fun DetalleTicketScreen(navController: NavController, ticketId: Int) {
                         isCancelling = true
                         apiService.cancelarTicket(ticketId, "Bearer $token")
                             .enqueue(object : Callback<Map<String, String>> {
-                                override fun onResponse(
-                                    call: Call<Map<String, String>>,
-                                    response: Response<Map<String, String>>
-                                ) {
+                                override fun onResponse(call: Call<Map<String, String>>, response: Response<Map<String, String>>) {
                                     isCancelling = false
                                     if (response.isSuccessful) {
                                         val mensaje = response.body()?.get("mensaje") ?: "Ticket cancelado"
                                         Toast.makeText(context, mensaje, Toast.LENGTH_LONG).show()
 
-                                        if (detalle?.permitir_cancelacion == true) {
-                                            // No cerrar sesión, solo ir a TusTicketsScreen
-                                            navController.navigate(AppScreens.TusTicketsScreen.route) {
-                                                popUpTo(AppScreens.TusTicketsScreen.route) { inclusive = true }
-                                            }
-                                        } else {
-                                            // Cerrar sesión y navegar a Login
-                                            sharedPreferences.edit().clear().apply()
-                                            navController.navigate(AppScreens.LoginScreen.route) {
-                                                popUpTo(0) { inclusive = true }
-                                            }
-                                        }
+                                        // Verificar estado usuario luego de cancelar
+                                        apiService.getUserProfile("Bearer $token")
+                                            .enqueue(object : Callback<UserProfileResponse> {
+                                                override fun onResponse(call: Call<UserProfileResponse>, perfilResponse: Response<UserProfileResponse>) {
+                                                    if (perfilResponse.isSuccessful) {
+                                                        val perfil = perfilResponse.body()
+                                                        if (perfil?.estado == "suspendido") {
+                                                            // Usuario suspendido: limpiar sesión y volver a login
+                                                            sharedPreferences.edit().clear().apply()
+                                                            navController.navigate(AppScreens.LoginScreen.route) {
+                                                                popUpTo(0) { inclusive = true }
+                                                            }
+                                                        } else {
+                                                            // Usuario no suspendido: navegar a pantalla tickets
+                                                            navController.navigate(AppScreens.TusTicketsScreen.route) {
+                                                                popUpTo(AppScreens.TusTicketsScreen.route) { inclusive = true }
+                                                            }
+                                                        }
+                                                    } else {
+                                                        // Error verificando perfil: navegar a pantalla tickets
+                                                        navController.navigate(AppScreens.TusTicketsScreen.route) {
+                                                            popUpTo(AppScreens.TusTicketsScreen.route) { inclusive = true }
+                                                        }
+                                                    }
+                                                }
+
+                                                override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
+                                                    // Error en llamada perfil: navegar a pantalla tickets
+                                                    navController.navigate(AppScreens.TusTicketsScreen.route) {
+                                                        popUpTo(AppScreens.TusTicketsScreen.route) { inclusive = true }
+                                                    }
+                                                }
+                                            })
+
                                     } else {
                                         val errorBody = response.errorBody()?.string()
                                         val mensajeError = try {

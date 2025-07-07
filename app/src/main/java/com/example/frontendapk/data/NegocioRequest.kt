@@ -5,5 +5,6 @@ data class NegocioRequest(
     val direccion: String,
     val categoria: String,
     val num_referencia: String,
-    val detalle: String
+    val detalle: String,
+    val doc_respaldo: ByteArray? = null
 )

@@ -20,7 +20,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TusTicketsScreen(navController: NavController) {
@@ -32,7 +31,8 @@ fun TusTicketsScreen(navController: NavController) {
     var loading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-
+    var selectedTabIndex by remember { mutableStateOf(0) }
+    val tabTitles = listOf("Activos", "Finalizados", "Cancelados")
 
     LaunchedEffect(token) {
         if (!token.isNullOrEmpty()) {
@@ -66,7 +66,6 @@ fun TusTicketsScreen(navController: NavController) {
         topBar = {
             TopAppBar(
                 title = { Text("Tus Tickets") },
-
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
@@ -76,37 +75,61 @@ fun TusTicketsScreen(navController: NavController) {
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding).padding(16.dp)) {
+
+            // Pestañas
+            TabRow(selectedTabIndex = selectedTabIndex) {
+                tabTitles.forEachIndexed { index, title ->
+                    Tab(
+                        selected = selectedTabIndex == index,
+                        onClick = { selectedTabIndex = index },
+                        text = { Text(title) }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             if (loading) {
                 Text("Cargando tickets...")
             } else if (errorMessage != null) {
                 Text("Error: $errorMessage")
-            } else if (tickets.isEmpty()) {
-                Text("No tienes tickets registrados.")
             } else {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    items(tickets) { ticket ->
+                val estadoFiltro = when (selectedTabIndex) {
+                    0 -> "activo"
+                    1 -> "finalizado"
+                    2 -> "cancelado"
+                    else -> ""
+                }
 
-                        val buttonColor = when (ticket.estado.lowercase()) {
-                            "activo" -> MaterialTheme.colorScheme.primary
-                            "finalizado" -> MaterialTheme.colorScheme.tertiary
-                            "cancelado" -> MaterialTheme.colorScheme.error
-                            else -> MaterialTheme.colorScheme.surfaceVariant
-                        }
+                val ticketsFiltrados = tickets.filter {
+                    it.estado.equals(estadoFiltro, ignoreCase = true)
+                }
 
+                if (ticketsFiltrados.isEmpty()) {
+                    Text("No hay tickets ${tabTitles[selectedTabIndex].lowercase()}.")
+                } else {
+                    LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        items(ticketsFiltrados) { ticket ->
+                            val buttonColor = when (ticket.estado.lowercase()) {
+                                "activo" -> MaterialTheme.colorScheme.primary
+                                "finalizado" -> MaterialTheme.colorScheme.tertiary
+                                "cancelado" -> MaterialTheme.colorScheme.error
+                                else -> MaterialTheme.colorScheme.surfaceVariant
+                            }
 
-                        Button(
-                            onClick = {
-                                navController.navigate(AppScreens.DetalleTicketScreen.createRoute(ticket.ticket_id))
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
-                        ) {
-                            Column {
-                                Text(text = ticket.negocio_nombre, style = MaterialTheme.typography.titleMedium)
-                                Text(text = ticket.fila_nombre, style = MaterialTheme.typography.bodyMedium)
-                                // Formatear fecha_hora_atencion a solo año y mes
-                                val fecha = ticket.fecha_hora_registro?.take(7) ?: "Fecha no disponible"
-                                Text(text = "Fecha: $fecha", style = MaterialTheme.typography.bodySmall)
+                            Button(
+                                onClick = {
+                                    navController.navigate(AppScreens.DetalleTicketScreen.createRoute(ticket.ticket_id))
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
+                            ) {
+                                Column {
+                                    Text(text = ticket.negocio_nombre, style = MaterialTheme.typography.titleMedium)
+                                    Text(text = ticket.fila_nombre, style = MaterialTheme.typography.bodyMedium)
+                                    val fecha = ticket.fecha_hora_registro?.take(10) ?: "Fecha no disponible"
+                                    Text(text = "Fecha: $fecha", style = MaterialTheme.typography.bodySmall)
+                                }
                             }
                         }
                     }

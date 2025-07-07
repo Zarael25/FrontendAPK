@@ -9,7 +9,11 @@ import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.Query
-
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.http.Multipart
+import retrofit2.http.Part
+import retrofit2.http.PartMap
 interface ApiService {
     @POST("api/registro/")
     fun registerUser(@Body user: User): Call<User>
@@ -29,10 +33,12 @@ interface ApiService {
         @retrofit2.http.Path("id") id: Int
     ): Call<Negocio>
 
+    @Multipart
     @POST("api/negocios/")
-    fun crearNegocio(
+    fun crearNegocioMultipart(
         @Header("Authorization") token: String,
-        @Body negocio: NegocioRequest
+        @PartMap campos: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part doc_respaldo: MultipartBody.Part?
     ): Call<Negocio>
 
 

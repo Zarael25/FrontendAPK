@@ -52,4 +52,11 @@ sealed class AppScreens(val route: String) {
     }
 
 
+    object TicketsFilaScreen {
+        fun createRoute(filaId: Int) = "tickets_fila_screen/$filaId"
+        const val route = "tickets_fila_screen/{filaId}"
+    }
+
+
+
 }

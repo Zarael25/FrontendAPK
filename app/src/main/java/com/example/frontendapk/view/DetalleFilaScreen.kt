@@ -162,6 +162,26 @@ fun DetalleFilaScreen(navController: NavController, filaId: Int) {
                 ) {
                     Text("Editar datos")
                 }
+
+
+                Spacer(modifier = Modifier.height(8.dp)) // Espaciado opcional
+
+                Button(
+                    onClick = {
+                        navController.navigate(AppScreens.TicketsFilaScreen.createRoute(filaId))
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Ver Tickets de esta Fila")
+                }
+
+
+
+
+
+
+
+
             }
         } ?: Text("Cargando...", modifier = Modifier.padding(padding))
     }

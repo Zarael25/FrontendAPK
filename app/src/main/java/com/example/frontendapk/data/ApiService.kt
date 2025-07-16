@@ -125,5 +125,14 @@ interface ApiService {
         @Body request: EditarPoliticasRequest
     ): Call<Map<String, String>>
 
+    @GET("/api/tickets/{filaId}/por-fila/")
+    fun getTicketsPorFila(
+        @Header("Authorization") token: String,
+        @Path("filaId") filaId: Int
+    ): Call<List<Ticket>>
+
+
+
+
 
 }

@@ -141,4 +141,12 @@ interface ApiService {
     ): Call<Void>
 
 
+    @POST("api/adminlogin/")
+    fun loginAdmin(@Body request: LoginRequest): Call<AdminLoginResponse>
+
+    @GET("api/usuarios/buscar/")
+    fun buscarUsuariosPorNombre(
+        @Header("Authorization") token: String,
+        @Query("search") nombre: String
+    ): Call<List<Usuario>>
 }

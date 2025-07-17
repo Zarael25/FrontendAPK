@@ -23,7 +23,16 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.Alignment
+import com.example.frontendapk.R
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.ui.draw.alpha
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController) {
     // Estados para los campos de entrada
@@ -38,7 +47,40 @@ fun LoginScreen(navController: NavController) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(text = "Iniciar Sesión", style = MaterialTheme.typography.headlineLarge)
+        // Contador de clics oculto
+        var adminClickCount by remember { mutableStateOf(0) }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Iniciar Sesión",
+                style = MaterialTheme.typography.headlineLarge
+            )
+
+            // Botón secreto con imagen
+            Image(
+                painter = painterResource(id = R.drawable.logo4),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(32.dp)
+                    .clickable(
+                        indication = null, // 🔇 sin animación visual
+                        interactionSource = remember { MutableInteractionSource() }
+                    ){
+                        adminClickCount++
+                        if (adminClickCount >= 5) {
+                            Toast.makeText(context, "Modo administrador", Toast.LENGTH_SHORT).show()
+                            adminClickCount = 0
+                            navController.navigate("login_admin_screen")
+                        }
+                    }
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

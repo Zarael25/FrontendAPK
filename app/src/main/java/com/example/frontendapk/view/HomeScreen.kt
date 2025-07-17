@@ -26,9 +26,9 @@ fun HomeScreen(navController: NavController, nombre: String) {
 
         if (token.isNullOrEmpty()) {
             // Si no hay token, redirigir a LoginScreen
-            navController.navigate("login_screen") {
+            navController.navigate(AppScreens.LoginScreen.route) {
                 // Limpia el stack para que no pueda volver a Home sin loguearse
-                popUpTo(0)
+                popUpTo(AppScreens.LoginScreen.route) { inclusive = true }
             }
         }
     }

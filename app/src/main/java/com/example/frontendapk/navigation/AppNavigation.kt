@@ -29,13 +29,21 @@ import com.example.frontendapk.view.DetalleTicketScreen
 import com.example.frontendapk.view.TusTicketsScreen
 import com.example.frontendapk.view.TicketsFilaScreen
 import com.example.frontendapk.view.PoliticasCancelacionReservaScreen
+import com.example.frontendapk.view.LoginAdminScreen
+import com.example.frontendapk.view.HomeAdminScreen
+import com.example.frontendapk.view.ListarUsuariosAdminScreen
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-
-
+import androidx.compose.ui.platform.LocalContext
+import android.content.Context
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 
 @Composable
 fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues) {
+
+
+
     NavHost(
         navController = navController,
         startDestination = AppScreens.SplashScreen.route,
@@ -168,6 +176,19 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
         ) { backStackEntry ->
             val filaId = backStackEntry.arguments?.getInt("filaId") ?: return@composable
             TicketsFilaScreen(navController = navController, filaId = filaId)
+        }
+
+
+        composable(AppScreens.LoginAdminScreen.route) {
+            LoginAdminScreen(navController)
+        }
+
+        composable(AppScreens.HomeAdminScreen.route) {
+            HomeAdminScreen(navController)
+        }
+
+        composable(AppScreens.ListarUsuariosAdminScreen.route) {
+            ListarUsuariosAdminScreen(navController)
         }
 
 

@@ -2,8 +2,16 @@ package com.example.frontendapk.navigation
 
 sealed class AppScreens(val route: String) {
     object SplashScreen : AppScreens(route = "splash_screen")
+
     object RegisterScreen : AppScreens(route = "register_screen")
     object LoginScreen : AppScreens(route = "login_screen")
+
+
+    object HomeScreen : AppScreens("home_screen/{nombre}") {
+        fun createRoute(nombre: String) = "home_screen/$nombre"
+    }
+
+
     object PerfilScreen : AppScreens(route = "perfil_screen")
     object TusNegociosScreen : AppScreens(route = "tus_negocios_screen")
     object DetalleNegocioScreen : AppScreens("detalle_negocio/{negocioId}") {
@@ -58,5 +66,9 @@ sealed class AppScreens(val route: String) {
     }
 
 
+    object LoginAdminScreen : AppScreens("login_admin_screen")
 
+    object HomeAdminScreen : AppScreens("admin_home_screen")
+
+    object ListarUsuariosAdminScreen : AppScreens("listar_usuarios_admin_screen")
 }

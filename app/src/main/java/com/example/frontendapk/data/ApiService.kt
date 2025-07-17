@@ -125,14 +125,20 @@ interface ApiService {
         @Body request: EditarPoliticasRequest
     ): Call<Map<String, String>>
 
-    @GET("/api/tickets/{filaId}/por-fila/")
-    fun getTicketsPorFila(
+    @GET("api/tickets/{filaId}/por-fila/")
+    fun getTicketsPorFilaConFecha(
         @Header("Authorization") token: String,
-        @Path("filaId") filaId: Int
+        @Path("filaId") filaId: Int,
+        @Query("fecha") fecha: String
     ): Call<List<Ticket>>
 
 
-
+    @PATCH("api/tickets/{ticketId}/cambiar-estado/")
+    fun cambiarEstadoTicket(
+        @Header("Authorization") token: String,
+        @Path("ticketId") ticketId: Int,
+        @Body nuevoEstado: Map<String, String>
+    ): Call<Void>
 
 
 }

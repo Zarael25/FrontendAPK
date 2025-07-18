@@ -76,5 +76,11 @@ sealed class AppScreens(val route: String) {
         fun createRoute(usuarioId: Int): String = "editar_usuario_admin_screen/$usuarioId"
     }
 
+    object ListarNegociosAdminScreen : AppScreens("listar_negocios_admin_screen")
+
+    object EditarNegocioAdminScreen : AppScreens("editar_negocio_admin_screen/{negocioId}") {
+        fun createRoute(negocioId: Int): String = "editar_negocio_admin_screen/$negocioId"
+    }
+
 
 }

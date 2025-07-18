@@ -33,6 +33,8 @@ import com.example.frontendapk.view.LoginAdminScreen
 import com.example.frontendapk.view.HomeAdminScreen
 import com.example.frontendapk.view.ListarUsuariosAdminScreen
 import com.example.frontendapk.view.EditarUsuarioAdminScreen
+import com.example.frontendapk.view.ListarNegociosAdminScreen
+import com.example.frontendapk.view.EditarNegocioAdminScreen
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.compose.ui.platform.LocalContext
@@ -199,6 +201,19 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
             val usuarioId = backStackEntry.arguments?.getInt("usuarioId") ?: 0
             EditarUsuarioAdminScreen(navController = navController, usuarioId = usuarioId)
         }
+
+        composable(AppScreens.ListarNegociosAdminScreen.route) {
+            ListarNegociosAdminScreen(navController)
+        }
+
+        composable(
+            route = AppScreens.EditarNegocioAdminScreen.route,
+            arguments = listOf(navArgument("negocioId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val negocioId = backStackEntry.arguments?.getInt("negocioId") ?: 0
+            EditarNegocioAdminScreen(navController = navController, negocioId = negocioId)
+        }
+
 
 
     }

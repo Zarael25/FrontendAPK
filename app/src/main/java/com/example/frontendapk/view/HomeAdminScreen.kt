@@ -92,7 +92,7 @@ fun HomeAdminScreen(navController: NavController) {
 
             Button(
                 onClick = {
-                    navController.navigate(AppScreens.ListarUsuariosAdminScreen.route)
+                    navController.navigate(AppScreens.ListarNegociosAdminScreen.route)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

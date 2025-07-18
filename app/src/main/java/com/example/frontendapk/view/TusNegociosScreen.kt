@@ -67,7 +67,7 @@ fun TusNegociosScreen(navController: NavController) {
             topBar = {
                 TopAppBar(
                     title = { Text("Tus Negocios") },
-                    actions = {
+                    navigationIcon = {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(Icons.Default.ArrowBack, contentDescription = "Volver atrás")
                         }

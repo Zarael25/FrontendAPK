@@ -1,5 +1,5 @@
 package com.example.frontendapk.data
-/*
+
 data class Negocio(
     val negocio_id: Int,
     val nombre: String,
@@ -9,8 +9,8 @@ data class Negocio(
     val doc_respaldo: String?,
     val num_referencia: String,
     val detalle: String,
-    val usuario: Int,
     val permite_cancelar: Boolean,
     val tiempo_limite_cancelacion: Int,
-    val maximo_reservas_diarias: Int
-)*/
+    val maximo_reservas_diarias: Int,
+    val usuario: Int
+)

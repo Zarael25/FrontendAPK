@@ -31,7 +31,9 @@ class MainActivity : ComponentActivity() {
                 "login_admin_screen",
                 "admin_home_screen",
                 "listar_usuarios_admin_screen",
-                "editar_usuario_admin_screen/{usuarioId}"
+                "editar_usuario_admin_screen/{usuarioId}",
+                "listar_negocios_admin_screen",
+                "editar_negocio_admin_screen/{negocioId}"
 
                 // agrega aquí las rutas que correspondan a la sección admin
             )

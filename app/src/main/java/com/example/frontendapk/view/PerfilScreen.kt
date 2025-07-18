@@ -83,7 +83,7 @@ fun PerfilScreen(navController: NavController) {
         topBar = {
             TopAppBar(
                 title = { Text("Perfil del Usuario") },
-                actions = {
+                navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,

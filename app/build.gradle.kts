@@ -63,6 +63,9 @@ android {
 }
 
 dependencies {
+
+    implementation ("androidx.compose.material:material-icons-extended:1.4.3")
+
     implementation("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

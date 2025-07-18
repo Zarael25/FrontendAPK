@@ -18,6 +18,17 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+import android.app.TimePickerDialog
+import java.util.Calendar
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistroFilaScreen(navController: NavController, negocioId: Int) {
@@ -28,9 +39,37 @@ fun RegistroFilaScreen(navController: NavController, negocioId: Int) {
     var cantidadTickets by remember { mutableStateOf("") }
     var visible by remember { mutableStateOf(true) }
     var permitirCancelacion by remember { mutableStateOf(true) }
-    var periodoAtencion by remember { mutableStateOf("") }
+
+    // Ahora periodoAtencion es un número (minutos)
+    var periodoAtencionMinutos by remember { mutableStateOf("") }
+
+    // Para apertura y finalizacion guardamos un LocalTime o un String
     var apertura by remember { mutableStateOf("") }
     var finalizacion by remember { mutableStateOf("") }
+
+    // Para mostrar los time pickers
+    val aperturaCalendar = Calendar.getInstance()
+    val finalizacionCalendar = Calendar.getInstance()
+
+    val aperturaTimePickerDialog = TimePickerDialog(
+        context,
+        { _, hour: Int, minute: Int ->
+            apertura = String.format("%02d:%02d:00", hour, minute)
+        },
+        aperturaCalendar.get(Calendar.HOUR_OF_DAY),
+        aperturaCalendar.get(Calendar.MINUTE),
+        true
+    )
+
+    val finalizacionTimePickerDialog = TimePickerDialog(
+        context,
+        { _, hour: Int, minute: Int ->
+            finalizacion = String.format("%02d:%02d:00", hour, minute)
+        },
+        finalizacionCalendar.get(Calendar.HOUR_OF_DAY),
+        finalizacionCalendar.get(Calendar.MINUTE),
+        true
+    )
 
     Scaffold(
         topBar = {
@@ -54,28 +93,109 @@ fun RegistroFilaScreen(navController: NavController, negocioId: Int) {
             OutlinedTextField(
                 value = nombre,
                 onValueChange = { nombre = it },
-                label = { Text("Nombre de la fila") }
+                label = { Text("Nombre de la fila")},
             )
             OutlinedTextField(
                 value = cantidadTickets,
-                onValueChange = { cantidadTickets = it },
-                label = { Text("Cantidad de tickets") }
+                onValueChange = {
+                    // Solo números positivos
+                    if (it.all { c -> c.isDigit() }) cantidadTickets = it
+                },
+                label = { Text("Cantidad de tickets") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
-            OutlinedTextField(
-                value = periodoAtencion,
-                onValueChange = { periodoAtencion = it },
-                label = { Text("Periodo de atención (hh:mm:ss)") }
-            )
-            OutlinedTextField(
-                value = apertura,
-                onValueChange = { apertura = it },
-                label = { Text("Hora de apertura (hh:mm:ss)") }
-            )
-            OutlinedTextField(
-                value = finalizacion,
-                onValueChange = { finalizacion = it },
-                label = { Text("Hora de finalización (hh:mm:ss)") }
-            )
+
+
+
+
+            var periodoAtencionMinutos by remember { mutableStateOf("") }
+            var periodoActivado by remember { mutableStateOf(false) }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Input para periodo de atención
+                OutlinedTextField(
+                    value = periodoAtencionMinutos,
+                    onValueChange = {
+                        if (it.all { c -> c.isDigit() }) periodoAtencionMinutos = it
+                    },
+                    label = { Text("Periodo de atención (min)") },
+                    modifier = Modifier.weight(7f),
+                    enabled = periodoActivado,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number
+                    ),
+                    singleLine = true
+                )
+
+                // Switch Activar
+                Column(
+                    modifier = Modifier.weight(3f), // igual peso para que ocupe la mitad
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("Activar", style = MaterialTheme.typography.labelMedium)
+                    Switch(
+                        checked = periodoActivado,
+                        onCheckedChange = {
+                            periodoActivado = it
+                            if (!it) periodoAtencionMinutos = "" // Limpiar si se desactiva
+                        }
+                    )
+                }
+            }
+
+
+
+            // Campo de hora de apertura
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { aperturaTimePickerDialog.show() }
+            ) {
+                OutlinedTextField(
+                    value = apertura.ifEmpty { "00:00:00" }, // Mostrar algo por defecto
+                    onValueChange = {},
+                    label = { Text("Hora de apertura (hh:mm:ss)") },
+                    readOnly = true,
+                    trailingIcon = {
+                        Icon(Icons.Default.Schedule, contentDescription = "Seleccionar hora")
+                    },
+                    modifier = Modifier.fillMaxWidth(0.7f),
+                    enabled = false, // evita edición y activa correctamente el click en el padre
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        disabledBorderColor = Color.Gray
+                    )
+                )
+            }
+
+
+            // Campo de hora de finalización
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { finalizacionTimePickerDialog.show() }
+            ) {
+                OutlinedTextField(
+                    value = finalizacion.ifEmpty { "00:00:00" },
+                    onValueChange = {},
+                    label = { Text("Hora de finalización (hh:mm:ss)") },
+                    readOnly = true,
+                    trailingIcon = {
+                        Icon(Icons.Default.Schedule, contentDescription = "Seleccionar hora")
+                    },
+                    modifier = Modifier.fillMaxWidth(0.7f),
+                    enabled = false,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        disabledBorderColor = Color.Gray
+                    )
+                )
+            }
 
             Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                 Text("Visible:")
@@ -86,23 +206,27 @@ fun RegistroFilaScreen(navController: NavController, negocioId: Int) {
                 )
             }
 
-
             Button(
                 onClick = {
                     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
                     val token = prefs.getString("ACCESS_TOKEN", null)
 
                     if (!token.isNullOrEmpty()) {
+                        // Convertir minutos a hh:mm:ss
+                        val min = periodoAtencionMinutos.toIntOrNull() ?: 0
+                        val horas = min / 60
+                        val minutos = min % 60
+                        val periodoFormateado = String.format("%02d:%02d:00", horas, minutos)
+
                         val fila = FilaRequest(
                             nombre = nombre,
                             cantidad_tickets = cantidadTickets.toIntOrNull() ?: 0,
                             visible = visible,
-                            periodo_atencion = periodoAtencion,
+                            periodo_atencion = periodoFormateado,
                             apertura = apertura,
                             finalizacion = finalizacion,
                             negocio = negocioId,
                             numero_ticket_actual = 0
-
                         )
 
                         apiService.crearFila("Bearer $token", fila)

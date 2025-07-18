@@ -14,6 +14,9 @@ import okhttp3.RequestBody
 import retrofit2.http.Multipart
 import retrofit2.http.Part
 import retrofit2.http.PartMap
+import retrofit2.Response
+
+
 interface ApiService {
     @POST("api/registro/")
     fun registerUser(@Body user: User): Call<User>
@@ -162,6 +165,30 @@ interface ApiService {
         @Path("id_usuario") idUsuario: Int,
         @Body body: Map<String, @JvmSuppressWildcards Any>
     ): Call<Void>
+
+
+    @GET("api/negocios/buscar/")
+    fun buscarNegociosPorNombre(
+        @Header("Authorization") token: String,
+        @Query("search") nombre: String
+    ): Call<List<Negocio>>
+
+    @GET("api/negocios/{id}/")
+    suspend fun obtenerNegocioPorId(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<Negocio>
+
+
+    @PATCH("api/negocios/{id}/cambiar_estado/")
+    fun cambiarEstadoNegocio(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Body estado: Map<String, String>
+    ): Call<Void>
+
+
+
 
 
 

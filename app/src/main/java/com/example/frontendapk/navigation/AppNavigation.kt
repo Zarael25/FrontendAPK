@@ -32,6 +32,7 @@ import com.example.frontendapk.view.PoliticasCancelacionReservaScreen
 import com.example.frontendapk.view.LoginAdminScreen
 import com.example.frontendapk.view.HomeAdminScreen
 import com.example.frontendapk.view.ListarUsuariosAdminScreen
+import com.example.frontendapk.view.EditarUsuarioAdminScreen
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.compose.ui.platform.LocalContext
@@ -191,7 +192,13 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
             ListarUsuariosAdminScreen(navController)
         }
 
-
+        composable(
+            route = AppScreens.EditarUsuarioAdminScreen.route,
+            arguments = listOf(navArgument("usuarioId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val usuarioId = backStackEntry.arguments?.getInt("usuarioId") ?: 0
+            EditarUsuarioAdminScreen(navController = navController, usuarioId = usuarioId)
+        }
 
 
     }

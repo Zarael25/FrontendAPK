@@ -149,4 +149,20 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("search") nombre: String
     ): Call<List<Usuario>>
+
+    @GET("api/usuarios/{id}/")
+    fun getUsuarioById(
+        @Header("Authorization") token: String,
+        @Path("id") usuarioId: Int
+    ): Call<Usuario>
+
+    @PATCH("api/usuarios/{id_usuario}/admin_editar/")
+    fun adminEditarUsuario(
+        @Header("Authorization") token: String,
+        @Path("id_usuario") idUsuario: Int,
+        @Body body: Map<String, @JvmSuppressWildcards Any>
+    ): Call<Void>
+
+
+
 }

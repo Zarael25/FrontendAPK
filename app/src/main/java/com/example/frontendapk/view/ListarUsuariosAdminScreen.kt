@@ -22,6 +22,7 @@ import com.example.frontendapk.data.Usuario
 import android.content.Context
 
 
+
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.buildAnnotatedString
@@ -31,6 +32,7 @@ import androidx.compose.material3.Text
 
 import androidx.compose.ui.graphics.Color
 
+import com.example.frontendapk.navigation.AppScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -150,8 +152,7 @@ fun ListarUsuariosAdminScreen(navController: NavController) {
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Button(
                                         onClick = {
-                                            // Aquí puedes navegar a pantalla de detalle o revisión de usuario
-                                            // navController.navigate("detalle_usuario_screen/${usuario.usuario_id}")
+                                            navController.navigate(AppScreens.EditarUsuarioAdminScreen.createRoute(usuario.usuario_id))
                                         },
                                         modifier = Modifier.fillMaxWidth()
                                     ) {

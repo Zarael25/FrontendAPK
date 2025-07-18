@@ -71,4 +71,10 @@ sealed class AppScreens(val route: String) {
     object HomeAdminScreen : AppScreens("admin_home_screen")
 
     object ListarUsuariosAdminScreen : AppScreens("listar_usuarios_admin_screen")
+
+    object EditarUsuarioAdminScreen : AppScreens("editar_usuario_admin_screen/{usuarioId}") {
+        fun createRoute(usuarioId: Int): String = "editar_usuario_admin_screen/$usuarioId"
+    }
+
+
 }

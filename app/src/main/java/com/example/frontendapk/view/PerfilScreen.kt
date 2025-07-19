@@ -35,6 +35,10 @@ fun PerfilScreen(navController: NavController) {
     var nombre by remember { mutableStateOf("") }
     var estado by remember { mutableStateOf("") }
     var suscripcion by remember { mutableStateOf("") }
+    var suspendidoContador by remember { mutableStateOf(0) }
+
+    val limiteSuspendido = 5
+
 
     // Obtener token de SharedPreferences
     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -62,6 +66,7 @@ fun PerfilScreen(navController: NavController) {
                             nombre = profile.nombre
                             estado = profile.estado
                             suscripcion = profile.suscripcion
+                            suspendidoContador = profile.suspendido_contador
                         }
                     } else {
                         // Si el token no es válido o hay error, también redirigir a login
@@ -106,6 +111,17 @@ fun PerfilScreen(navController: NavController) {
             Text("Correo: $correo", style = MaterialTheme.typography.bodyLarge)
             Text("Estado: $estado", style = MaterialTheme.typography.bodyLarge)
             Text("Suscripción: $suscripcion", style = MaterialTheme.typography.bodyLarge)
+            Text("Suspensiones: $suspendidoContador/$limiteSuspendido", style = MaterialTheme.typography.bodyLarge)
+
+            if (suspendidoContador == 4) {
+                Text(
+                    text = "La próxima vez que canceles un ticket serás suspendido indefinidamente.",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+
         }
     }
 }

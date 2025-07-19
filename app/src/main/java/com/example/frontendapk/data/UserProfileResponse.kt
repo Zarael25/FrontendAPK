@@ -6,5 +6,6 @@ data class UserProfileResponse(
     val correo: String,
     val nombre: String,
     val estado: String,
-    val suscripcion: String
+    val suscripcion: String,
+    val suspendido_contador: Int
 )

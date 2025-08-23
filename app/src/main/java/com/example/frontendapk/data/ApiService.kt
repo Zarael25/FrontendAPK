@@ -144,22 +144,22 @@ interface ApiService {
     ): Call<Void>
 
 
-    @POST("api/adminlogin/")
+    @POST("apiadmin/adminlogin/")
     fun loginAdmin(@Body request: LoginRequest): Call<AdminLoginResponse>
 
-    @GET("api/usuarios/buscar/")
+    @GET("apiadmin/usuarios/buscar/")
     fun buscarUsuariosPorNombre(
         @Header("Authorization") token: String,
         @Query("search") nombre: String
     ): Call<List<Usuario>>
 
-    @GET("api/usuarios/{id}/")
+    @GET("apiadmin/usuarios/{id}/")
     fun getUsuarioById(
         @Header("Authorization") token: String,
         @Path("id") usuarioId: Int
     ): Call<Usuario>
 
-    @PATCH("api/usuarios/{id_usuario}/admin_editar/")
+    @PATCH("apiadmin/usuarios/{id_usuario}/admin_editar/")
     fun adminEditarUsuario(
         @Header("Authorization") token: String,
         @Path("id_usuario") idUsuario: Int,
@@ -167,20 +167,20 @@ interface ApiService {
     ): Call<Void>
 
 
-    @GET("api/negocios/buscar/")
+    @GET("apiadmin/negocios/buscar/")
     fun buscarNegociosPorNombre(
         @Header("Authorization") token: String,
         @Query("search") nombre: String
     ): Call<List<Negocio>>
 
-    @GET("api/negocios/{id}/")
+    @GET("apiadmin/negocios/{id}/")
     suspend fun obtenerNegocioPorId(
         @Header("Authorization") token: String,
         @Path("id") id: Int
     ): Response<Negocio>
 
 
-    @PATCH("api/negocios/{id}/cambiar_estado/")
+    @PATCH("apiadmin/negocios/{id}/cambiar_estado/")
     fun cambiarEstadoNegocio(
         @Header("Authorization") token: String,
         @Path("id") id: Int,

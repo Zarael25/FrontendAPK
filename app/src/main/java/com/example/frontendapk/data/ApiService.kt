@@ -144,6 +144,25 @@ interface ApiService {
     ): Call<Void>
 
 
+    @PATCH("api/usuarios/editar-perfil/")
+    fun editarPerfil(
+        @Header("Authorization") token: String,
+        @Body body: EditarPerfilRequest
+    ): Call<UserProfileResponse>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @POST("apiadmin/adminlogin/")
     fun loginAdmin(@Body request: LoginRequest): Call<AdminLoginResponse>
 

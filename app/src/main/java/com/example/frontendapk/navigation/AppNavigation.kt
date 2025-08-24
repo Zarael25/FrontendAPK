@@ -29,6 +29,7 @@ import com.example.frontendapk.view.DetalleTicketScreen
 import com.example.frontendapk.view.TusTicketsScreen
 import com.example.frontendapk.view.TicketsFilaScreen
 import com.example.frontendapk.view.PoliticasCancelacionReservaScreen
+import com.example.frontendapk.view.EditarMiPerfilScreen
 import com.example.frontendapk.view.LoginAdminScreen
 import com.example.frontendapk.view.HomeAdminScreen
 import com.example.frontendapk.view.ListarUsuariosAdminScreen
@@ -180,6 +181,21 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
             val filaId = backStackEntry.arguments?.getInt("filaId") ?: return@composable
             TicketsFilaScreen(navController = navController, filaId = filaId)
         }
+
+        composable(AppScreens.EditarMiPerfilScreen.route) {
+            EditarMiPerfilScreen(navController = navController)
+        }
+
+
+
+
+
+
+
+
+
+
+
 
 
         composable(AppScreens.LoginAdminScreen.route) {

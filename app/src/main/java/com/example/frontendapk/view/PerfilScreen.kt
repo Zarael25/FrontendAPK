@@ -121,6 +121,19 @@ fun PerfilScreen(navController: NavController) {
                 )
             }
 
+            // --- Botón para editar perfil ---
+            Button(
+                onClick = {
+                    navController.navigate(AppScreens.EditarMiPerfilScreen.route)
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Editar Perfil")
+            }
+
+
+
+
 
         }
     }

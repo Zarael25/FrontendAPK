@@ -66,6 +66,19 @@ sealed class AppScreens(val route: String) {
     }
 
 
+    object EditarMiPerfilScreen : AppScreens("editar_mi_perfil_screen")
+
+
+
+
+
+
+
+
+
+
+
+
     object LoginAdminScreen : AppScreens("login_admin_screen")
 
     object HomeAdminScreen : AppScreens("admin_home_screen")
